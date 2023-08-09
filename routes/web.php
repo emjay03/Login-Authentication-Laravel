@@ -1,7 +1,9 @@
 <?php
 
+use App\Http\Controllers\Auth\ProviderController;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
+use NunoMaduro\Collision\Provider;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,10 +19,16 @@ use Illuminate\Support\Facades\Route;
 Route::get('/ ', function () {
     return view('/auth/login');
 });
-
+Route::get('/auth/{provider}/redirect', [ProviderController::class,'redirect'] );
+ 
+Route::get('/auth/{provider}/callback', [ProviderController::class,'callback'] );
 Route::get('/dashboard', function () {
     return view('dashboard');
 })->middleware(['auth', 'verified'])->name('dashboard');
+
+Route::get('/welcome', function () {
+    return view('welcome');
+})->middleware(['auth', 'verified'])->name('welcome');
 
  
 Route::middleware('auth')->group(function () {
