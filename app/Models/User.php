@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
+use Illuminate\Support\Str;
 
 class User extends Authenticatable
 {
@@ -21,6 +22,11 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'username',
+        'provider',
+        'provider_id',
+        'provider_token',
+
     ];
 
     /**
@@ -42,4 +48,16 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    public function generateUserName($username)
+    {
+        if ($username === null) {
+            $username = Str::lower('default_username'); // Replace 'default_username' with your default username value
+        } 
+        if(User::where('username', $username)->exists()) {
+            $newUsername = $username.Str::lower (Str::random(5));
+            $username = self::generateUsername($newUsername);
+        }
+
+        return $username;
+    }
 }
